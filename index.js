@@ -49,6 +49,15 @@ module.exports.createUser = async (event) => {
         .adminCreateUser(adminCreateUserParams)
         .promise();
 
+      await cognitoIdentityServiceProvider
+        .adminSetUserPassword({
+          UserPoolId: USERPOOL,
+          Username: username,
+          Password: "Temp@123",
+          Permanent: false,
+        })
+        .promise();
+
       return {
         statusCode: 200,
         body: JSON.stringify(`${userRole} has created user successfully.`),

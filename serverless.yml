@@ -18,6 +18,7 @@ provider:
       Action:
         - "cognito-idp:AdminCreateUser"
         - "cognito-idp:AdminAddUserToGroup"
+        - "cognito-idp:AdminSetUserPassword"
       Resource:
         - !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${CognitoUserPool.UserPoolId}"
         - "*"
@@ -38,6 +39,26 @@ provider:
           - !GetAtt CognitoUserPoolClient.ClientId
 
 functions:
+  syncDatabase:
+    handler: functions/sync-database.handler
+    package:
+      include:
+        - functions/sync-database.js
+        - lib/init-sequelize.js
+        - lib/sequelize-middleware.js
+        - lib/models/**
+      exclude:
+        - "**/*"
+
+  getTransportOrder:
+    handler: functions/get-transport-order.handler
+    package:
+      include:
+        - functions/get-transport-order.js
+        - lib/**
+      exclude:
+        - "**/*"
+
   hw:
     handler: index.handler
 
@@ -119,6 +140,5 @@ resources:
         Description: Student
         GroupName: StudentGroup
         Precedence: 2
-
         UserPoolId:
           Ref: CognitoUserPool
