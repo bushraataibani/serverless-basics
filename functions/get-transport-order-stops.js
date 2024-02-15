@@ -1,4 +1,5 @@
 const middy = require("middy");
+
 const { middleware } = require("../lib/sequelize-middleware");
 
 const handler = middy(async (event, context) => {
@@ -7,20 +8,26 @@ const handler = middy(async (event, context) => {
 
   const { arguments = {} } = event;
   const { models } = context;
-  const { TransportOrder, TransportOrderStops } = models;
+  const { TransportOrderStops } = models;
 
   try {
-    const { rows } = await TransportOrder.findAndCountAll({
+    await TransportOrderStops.bulkCreate([
+      {
+        ID: 90,
+        stop: "15",
+      },
+      {
+        ID: 46,
+        stop: "16",
+      },
+    ]);
+
+    const { rows } = await TransportOrderStops.findAndCountAll({
       where: {
         ID: event.ID,
       },
-      include: [
-        {
-          model: TransportOrderStops,
-        },
-      ],
     });
-    console.log("TransportOrder", JSON.stringify(rows));
+    console.log("TransportOrderStops", JSON.stringify(rows));
   } catch (err) {
     console.log("Error at query", JSON.stringify(err));
     throw err;

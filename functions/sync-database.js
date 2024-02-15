@@ -1,7 +1,7 @@
 const middy = require("middy");
 const { middleware } = require("../lib/sequelize-middleware");
 
-const SYNC_DB = "full";
+const SYNC_DB = "force";
 
 const handler = middy(async (event, context) => {
   console.log("Incoming event", JSON.stringify(event));

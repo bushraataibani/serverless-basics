@@ -59,6 +59,15 @@ functions:
       exclude:
         - "**/*"
 
+  getTransportOrderStops:
+    handler: functions/get-transport-order-stops.handler
+    package:
+      include:
+        - functions/get-transport-order-stops.js
+        - lib/**
+      exclude:
+        - "**/*"
+
   hw:
     handler: index.handler
 
@@ -130,7 +139,6 @@ resources:
         Description: Admin
         GroupName: AdminGroup
         Precedence: 1
-
         UserPoolId:
           Ref: CognitoUserPool
 
